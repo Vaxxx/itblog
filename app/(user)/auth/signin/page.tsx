@@ -1,10 +1,12 @@
 "use client";
-import React,{useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import {useRouter} from "next/navigation";
-import {signIn} from "next-auth/react";
+import {signIn, useSession} from "next-auth/react";
 import toast from "react-hot-toast";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
+import {FaGithubSquare} from "react-icons/fa";
+import {FaSquareGooglePlus} from "react-icons/fa6";
 
 interface InitialStateProps{
     email: string;
@@ -20,6 +22,13 @@ const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState(initialState);
     const router = useRouter();
+    const session  = useSession();
+
+    useEffect(()=> {
+        if(session?.status === 'authenticated'){
+            router.push("/pages/dashboard");
+        }
+        },[])
 
     function handleChange(event: any){
         setData({...data, [event.target.name] : event.target.value});
@@ -102,6 +111,25 @@ const LoginPage = () => {
                             <button type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-500 "}>Login</button>
                         </div>
                     </form>
+                    <hr className={"text-slate-950 my-3 shadow-lg"}/>
+                    {/*sign in using GitHub */}
+                    <div className="form-control w-full max-w-xs mt-5">
+                        <button
+                            onClick={()=>signIn("github")}
+                            type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-500 text-center"}>
+                            <FaGithubSquare size={40}/>   Sign In with GitHub
+                        </button>
+                    </div>
+                    {/*/////sign in using GitHub */}
+                    {/*sign in using Google */}
+                    <div className="form-control w-full max-w-xs mt-5">
+                        <button
+                            onClick={()=>signIn("google")}
+                            type={"submit"} className={"btn btn-active btn-primary hover:ring-2 hover:ring-blue-500 text-center"}>
+                            <FaSquareGooglePlus size={40}/>   Sign In with Google
+                        </button>
+                    </div>
+                    {/*///////sign in using Google */}
                 </div>
             </div>
             <Footer/>

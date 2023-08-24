@@ -73,12 +73,16 @@ const Navbar = () => {
                             <>
                                 <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
                                     <li>
-                                        <a className="justify-between">
-                                            Profile
-                                            <span className="badge">New</span>
-                                        </a>
+                                        <Link href={"/pages/dashboard"} className="justify-between">
+                                            Dashboard
+                                        </Link>
                                     </li>
-                                    <li><a>Settings</a></li>
+                                    <li>
+                                        <Link href={"/profile"} className="justify-between">
+                                            Profile
+                                        </Link>
+                                    </li>
+                                    <li><Link href={"/settings"}>Settings</Link></li>
                                     <li><button className={"bg-red-500 text-white rounded-lg"}
                                       onClick={()=>signOut()}
                                     >Sign Out</button></li>

@@ -12,55 +12,66 @@ datasource db {
 
 
 model User {
-     id                  Int      @id @default(autoincrement())
-     username            String?
-     name                String?
-     email               String?   @unique
-     emailVerified       DateTime?
-     password            String?
-     picture             String?
-     createdAt DateTime  @default(now())
-     updatedAt DateTime  @updatedAt
+     id                    Int      @id @default(autoincrement())
+     username              String?
+     name                  String?
+     email                 String?   @unique
+     emailVerified         DateTime?
+     password              String?
+     picture               String?
+     createdAt DateTime    @default(now())
+     updatedAt DateTime    @updatedAt
 
-     accounts Account[]
-     posts Post[]
+     accounts              Account[]
+     posts                 Post[]
 }
 
 model Post {
-   id                    Int     @id @default(autoincrement())
-   title                 String?
-   message               String?
-   Image                 String?
-   createdAt DateTime    @default(now())
-   updatedAt DateTime    @updatedAt
-   posts                 User?   @relation(fields: [userId], references: [id])
-   userId                Int
+     id                    Int     @id @default(autoincrement())
+     title                 String?
+     message               String?
+     Image                 String?
+     createdAt DateTime    @default(now())
+     updatedAt DateTime    @updatedAt
+     posts                 User?   @relation(fields: [userId], references: [id])
+     userId                Int
 
-   category Category[]
+     categories            Category[]
+     comments              Comment[]
 }
 
 model Account {
-  id                 Int     @id @default(autoincrement())
-  type               String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
+     id                    Int     @id @default(autoincrement())
+     type                  String
+     refresh_token         String?
+     access_token          String?
+     expires_at            Int?
+     token_type            String?
+     scope                 String?
+     id_token              String?
+     session_state         String?
 
-  accounts           User?   @relation(fields: [userId], references: [id])
-  userId             Int
+     accounts              User?   @relation(fields: [userId], references: [id])
+     userId                Int
 
-  provider           String
-  providerAccountId  Int
+     provider              String
+     providerAccountId     Int
 
 }
 
 
 model Category {
-  id                 Int     @id @default(autoincrement())
-  title              String
-  post       Post[]
+     id                    Int     @id @default(autoincrement())
+     title                 String  @unique
+     posts                 Post[]
   }
+
+model Comment {
+     id                    Int     @id @default(autoincrement())
+     comment               String
+     createdAt DateTime    @default(now())
+     updatedAt DateTime    @updatedAt
+     posts                 Post?   @relation(fields: [postId], references: [id])
+     postId                Int
+  }
+

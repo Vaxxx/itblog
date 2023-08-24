@@ -1,8 +1,9 @@
 "use client";
-import React,{useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import Loader from "@/components/Loader";
+import {useSession} from "next-auth/react";
 
 interface InitialStateProps{
     name: string;
@@ -24,6 +25,14 @@ const RegisterPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState(initialState);
     const router = useRouter();
+    const session = useSession();
+
+    {/*  if signed in, redirect to dashboard */}
+    useEffect(() => {
+        if(session?.status === 'authenticated'){
+            router.push("pages/dashboard");
+        }
+    }, []);
 
     function handleChange(event:any){
         setData({...data, [event.target.name] : event.target.value});
