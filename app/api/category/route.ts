@@ -4,6 +4,7 @@ import {NextResponse} from "next/server";
 
 interface RequestBody{
     title: string;
+    description: string;
 }
 
 export const POST = async(request: Request) => {
@@ -11,7 +12,8 @@ export const POST = async(request: Request) => {
          const body:RequestBody = await request.json();
          await prisma.category.create({
              data: {
-                 title: body.title
+                 title: body.title,
+                 description: body.description
              }
          });
         return NextResponse.json({message: "Category Added Successfully!"}, {status: 201})

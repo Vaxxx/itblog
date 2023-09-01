@@ -3,33 +3,27 @@ import React, {useState, useEffect, ChangeEvent, FormEvent} from 'react';
 import Footer from "@/components/Footer";
 import {AiOutlineEdit} from "react-icons/ai";
 import Link from "next/link";
-import {useParams, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 import toast from "react-hot-toast";
 import {GiCancel} from "react-icons/gi";
 import {getCategoryById, updateCategoryById} from "@/app/actions/category/getCategoryById";
+import Loader from "@/components/Loader";
 
 
 interface InitialStateProps{
+    description: string;
     title: string;
     id: number;
 }
 
 const initialState: InitialStateProps = {
-    title: ''
+    id: '',
+    title: '',
+    description: ''
 }
 
-//
-// async function getCategoryById(id: number){
-//
-//     const response = await fetch(`/api/category/${id}`);
-//     const data = await response.json();
-//     return data.category;
-// }
-// const test = getCategoryById(Number(1))
-// console.log(test)
-
 const CategoryIdPage = ({params} : {params: {id: number}}) => {
-
+    const [isLoading, setIsLoading]  = useState(false)
     const [data, setData] = useState(initialState);
     const router = useRouter();
    // const params = useParams();
@@ -38,15 +32,21 @@ const CategoryIdPage = ({params} : {params: {id: number}}) => {
    //  console.log(test)
 
     useEffect(() => {
-        toast.loading("Fetching Category Details ...")
-        getCategoryById(params.categoryId)
-            .then((category) => {
-                setData(category);
-                toast.success("Fetching Complete!")
-            })
-            .catch((error) => {
-                toast.error("Error Fetching Category: ", error);
-            });
+        try{
+            setIsLoading(true);
+            getCategoryById(params.categoryId)
+                .then((category) => {
+                    setData(category);
+                    toast.success("Fetching Complete!")
+                })
+                .catch((error) => {
+                    toast.error("Error Fetching Category: ", error);
+                });
+          }catch(error){
+            console.log(" Category ID Page ERROR: " + error);
+          }finally{
+            setIsLoading(false);
+        }
     }, []);
 
     function handleChange(event: ChangeEvent<HTMLInputElement>){
@@ -56,11 +56,11 @@ const CategoryIdPage = ({params} : {params: {id: number}}) => {
     const updateCategory = async(event: FormEvent) => {
         event.preventDefault();
       try{
-          toast.loading("Updating Category.");
-          console.log("titleeee: ", data.title);
-          console.log("iDDDD: ", params.categoryId)
+         // toast.loading("Updating Category.");
+          setIsLoading(true);
           await updateCategoryById({
               title: data.title,
+              description: data.description,
               id: params.categoryId
           });
           toast.success("Category Updated Successfully!");
@@ -68,10 +68,20 @@ const CategoryIdPage = ({params} : {params: {id: number}}) => {
         }catch(error){
           console.log("UPDATE ERROR: " + error);
         }
+        finally {
+          setIsLoading(false);
+      }
     }
 
     return (
         <>
+            {
+                isLoading && (
+                    <div>
+                        <Loader/>
+                    </div>
+                )
+            }
             <div className="ie bg-white px-6 py-24 sm:py-32 lg:px-8">
                 <div
                     className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
@@ -104,12 +114,25 @@ const CategoryIdPage = ({params} : {params: {id: number}}) => {
                                 type="text"  placeholder="Enter title"
                                 className="input input-bordered w-full max-w-xs hover:ring-2 hover:ring-blue-500" />
                         </div>
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Description!</span>
+                            </label>
+                            <textarea
+                                value={data.description}
+                                required
+                                onChange={handleChange}
+                                name={"description"}   placeholder="Enter description"
+                                minLength={"10"}
+                                maxLength={"1000"}
+                                className="textarea textarea-bordered h-40 w-full max-w-xs hover:ring-2 hover:ring-blue-500" />
+                        </div>
                          <div className={"flex flex-rows gap-3"}>
                              <div className="form-control w-full max-w-xs mt-5">
                                  <Link href={"/pages/category"} title={"Go Back To Category Page"} type={"submit"} className={"btn bg-gray-500 hover:ring-2 hover:ring-blue-500 rounded-lg"}><GiCancel size={20}/> Cancel</Link>
                              </div>
                              <div className="form-control w-full max-w-xs mt-5">
-                                 <button type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-500 rounded-lg"}><AiOutlineEdit size={20}/> Edit Category</button>
+                                 <button type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-500 rounded-lg"}><AiOutlineEdit size={20}/> Update Category</button>
                              </div>
                          </div>
 

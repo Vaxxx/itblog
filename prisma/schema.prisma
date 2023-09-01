@@ -29,8 +29,8 @@ model User {
 model Post {
      id                    Int     @id @default(autoincrement())
      title                 String?
-     message               String?
-     Image                 String?
+     message               String? @db.Text
+     image                 String?
      createdAt DateTime    @default(now())
      updatedAt DateTime    @updatedAt
      posts                 User?   @relation(fields: [userId], references: [id])
@@ -62,13 +62,14 @@ model Account {
 
 model Category {
      id                    Int     @id @default(autoincrement())
-     title                 String  @unique
+     title                 String?
+     description           String?  @db.Text
      posts                 Post[]
   }
 
 model Comment {
      id                    Int     @id @default(autoincrement())
-     comment               String
+     comment               String  @db.Text
      createdAt DateTime    @default(now())
      updatedAt DateTime    @updatedAt
      posts                 Post?   @relation(fields: [postId], references: [id])

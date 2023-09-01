@@ -1,10 +1,10 @@
 import prisma from "@/libs/db";
 import {NextResponse} from "next/server";
-import {number} from "zod";
 
 
 interface RequestBody{
-    title: String;
+    title: string;
+    description: string;
 }
 
 //get a single category
@@ -15,32 +15,20 @@ export async function GET(request: Request, {params}: {params:RequestBody}){
         }
     })
     return NextResponse.json({category}, {status: 200});
-
-  // try{
-  //     const categoryId = request.url.split("/category/")[1];
-  //     const category = await prisma.category.findUnique({
-  //         where: {
-  //             id: Number(categoryId)
-  //         }
-  //     });
-  //     if(!category)
-  //         return NextResponse.json({message: "Category not found"}, {status: 404});
-  //     return NextResponse.json({category}, {status: 200});
-  //   }catch(error){
-  //     console.log("ERROR: " + error);
-  //     return NextResponse.json({message: "GET ERROR: ", error}, {status: 500});
-  //   }
  }
 
 //update a single category
 export async function PUT(request:Request, {params}: {params: {categoryId: number}}){
     const body: RequestBody = await request.json();
+    console.log("PUTTTT")
+    console.log(body)
     const category = await prisma.category.update({
         where: {
             id: Number(+params.categoryId)
         },
         data : {
-            title: body.title
+            title: body.title,
+            description: body.description
         }
     });
     return NextResponse.json({category}, {status: 200});
