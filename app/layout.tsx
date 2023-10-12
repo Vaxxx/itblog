@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google'
 import Navbar from "@/components/Navbar";
 import {Providers} from "@/app/providers";
 import ToasterContext from "@/app/ToasterContext";
+import React from "react";
+import QueryWrapper from "@/app/query-wrapper";
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -22,9 +24,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-            <ToasterContext/>
-            <Navbar/>
-            {children}
+           <QueryWrapper>
+               <ToasterContext/>
+               <Navbar/>
+               {children}
+           </QueryWrapper>
         </Providers>
       </body>
     </html>

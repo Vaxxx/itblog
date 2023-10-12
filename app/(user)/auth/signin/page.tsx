@@ -5,8 +5,11 @@ import {signIn, useSession} from "next-auth/react";
 import toast from "react-hot-toast";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
-import {FaGithubSquare} from "react-icons/fa";
+import {FaGithubSquare, FaRegArrowAltCircleLeft, FaSign} from "react-icons/fa";
 import {FaSquareGooglePlus} from "react-icons/fa6";
+import Link from "next/link";
+import {CiLogin} from "react-icons/ci";
+import {BsGoogle} from "react-icons/bs";
 
 interface InitialStateProps{
     email: string;
@@ -43,6 +46,7 @@ const LoginPage = () => {
                redirect: false,
            }).then((callback) => {
                if(callback?.error){
+                   console.log("something is wrong: " + callback.error)
                    toast.error("Something went wrong! " + callback.error)
                }else if(callback?.ok && !callback?.error){
                    toast.success("Login is Successful!");
@@ -95,7 +99,7 @@ const LoginPage = () => {
                                 value={data.email}
                                 onChange={handleChange}
                                 type="email" name={"email"} placeholder="Enter Email Address"
-                                className="input input-bordered w-full max-w-xs hover:ring-2 hover:ring-blue-500" />
+                                className="input input-bordered bg-slate-300 w-full max-w-xs hover:ring-2 hover:ring-blue-500" />
                         </div>
                         <div className="form-control w-full max-w-xs mb-5">
                             <label className="label">
@@ -105,17 +109,17 @@ const LoginPage = () => {
                                 value={data.password}
                                 onChange={handleChange}
                                 type="password" name={"password"} placeholder="**********"
-                                className="input input-bordered w-full max-w-xs hover:ring-2 hover:ring-blue-500" />
+                                className="input input-bordered bg-slate-300 w-full max-w-xs hover:ring-2 hover:ring-blue-500" />
                         </div>
                         <div className="form-control w-full max-w-xs mt-5">
-                            <button type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-500 "}>Login</button>
+                            <button type={"submit"} className={"btn btn-active bg-slate-700 hover:ring-2 hover:ring-blue-500 "}>Login</button>
                         </div>
                     </form>
                     <hr className={"text-slate-950 my-3 shadow-lg"}/>
                     {/*sign in using GitHub */}
                     <div className="form-control w-full max-w-xs mt-5">
                         <button
-                            onClick={()=>signIn("github")}
+                            onClick={()=>signIn("github", {callbackUrl: "/"})}
                             type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-500 text-center"}>
                             <FaGithubSquare size={40}/>   Sign In with GitHub
                         </button>
@@ -124,10 +128,19 @@ const LoginPage = () => {
                     {/*sign in using Google */}
                     <div className="form-control w-full max-w-xs mt-5">
                         <button
-                            onClick={()=>signIn("google")}
+                            onClick={()=>signIn("google", {callbackUrl: "/"})}
                             type={"submit"} className={"btn btn-active btn-primary hover:ring-2 hover:ring-blue-500 text-center"}>
-                            <FaSquareGooglePlus size={40}/>   Sign In with Google
+                            <BsGoogle size={40}/>   Sign In with Google
                         </button>
+                    </div>
+                    {/*///////sign in using Google */}
+                    {/*sign up or register*/}
+                    <div className="form-control w-full max-w-xs mt-5">
+                        <Link
+                            href={"/auth/register"}
+                            className={"btn btn-active py-5 btn-primary hover:ring-2 hover:ring-blue-500 text-center"}>
+                            <CiLogin size={20}/>  No account? Sign Up
+                        </Link>
                     </div>
                     {/*///////sign in using Google */}
                 </div>

@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation";
 import axios from "axios";
 import Loader from "@/components/Loader";
 import {useSession} from "next-auth/react";
+import Link from "next/link";
 
 interface InitialStateProps{
     name: string;
@@ -91,7 +92,7 @@ const RegisterPage = () => {
                                  required
                                  value={data.name}
                                  onChange={handleChange}
-                                 type="text" placeholder="Enter Full Name" className="input input-bordered w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
+                                 type="text" placeholder="Enter Full Name" className="input input-bordered bg-slate-300 w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
                          </div>
 
                          <div className="form-control w-full max-w-xs">
@@ -103,7 +104,7 @@ const RegisterPage = () => {
                                  required
                                  value={data.username}
                                  onChange={handleChange}
-                                 type="text" placeholder="Enter User Name" className="input input-bordered w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
+                                 type="text" placeholder="Enter User Name" className="input input-bordered  bg-slate-300 w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
                          </div>
 
 
@@ -116,7 +117,7 @@ const RegisterPage = () => {
                                  required
                                  value={data.email}
                                  onChange={handleChange}
-                                 type="email" placeholder="Enter Email Address" className="input input-bordered w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
+                                 type="email" placeholder="Enter Email Address" className="input input-bordered  bg-slate-300 w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
                          </div>
 
                          <div className="form-control w-full max-w-xs">
@@ -128,12 +129,14 @@ const RegisterPage = () => {
                                  required
                                  value={data.password}
                                  onChange={handleChange}
-                                 type="password" placeholder="**********" className="input input-bordered w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
+                                 type="password" placeholder="**********" className="input input-bordered  bg-slate-300 w-full max-w-xs hover:ring-2 hover:ring-blue-500 " />
                          </div>
 
                          <div className="form-control w-full max-w-xs mt-5">
-                             <button type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-800 "}>Login</button>
+                             <button type={"submit"} className={"btn btn-active hover:ring-2 hover:ring-blue-800 "}>Sign Up</button>
                          </div>
+
+                         <Link href={"/auth/signin"} className={"mt-5 my-5 rounded-lg text-red-800 p-4 hover:text-blue-400 hover:underline"} >Already have an account, Sign In</Link>
                      </form>
                     {/*///Add Content Here */}
                 </div>

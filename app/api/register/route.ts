@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import prisma from "@/libs/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 interface RequestBody{
     name: string;

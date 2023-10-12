@@ -5,36 +5,40 @@ import {getAllCategories} from "@/app/actions/category/getAllCategories";
 import toast from "react-hot-toast";
 import Loader from "@/components/Loader";
 import {AiFillSave} from "react-icons/ai";
+import ImageUpload from "@/components/form/ImageUpload";
+import Image from "next/image";
 
 interface  InitialDataProps{
     title: string;
     message: string;
     cate: string;
-    image: string;
+    imageSrc: string;
 }
 
 const initialData: InitialDataProps = {
     title: '',
     message:'',
     cate: '',
-    image: ''
+    imageSrc: ''
 }
 
 interface PostProps{
     title?:     string | null;
     message?:   string | null;
     cate?:      string | null;
-    image?:     string | null;
+    imageSrc?:     string | null;
 }
 
-const AddPostComponent = ({title, message, cate, image}: PostProps) => {
+const AddPostComponent = ({title, message, cate, imageSrc}: PostProps) => {
     const [isLoading, setIsLoading] = useState(false);//create a loading scene when button is pressed
     const [state, setState] = useState(initialData); //the state of the title,message
+
+  //combo box details
     const [options, setOptions] = useState([]); //initial state of the combobox ie an array to store them
     const [selectedOption, setSelectedOption] = useState("");//the selected value of the combo box
 
-    const [file, setFile] = useState<File>(); //variables for the image
-    const [createObjectURL, setCreateObjectUrl] = useState(null);
+    // const [file, setFile] = useState<File>(); //variables for the image
+    // const [createObjectURL, setCreateObjectUrl] = useState(null);
     const router = useRouter();
 
 
@@ -42,15 +46,23 @@ const AddPostComponent = ({title, message, cate, image}: PostProps) => {
         setSelectedOption(event.target.value)
     }
 
-    const handleImageChange = (event: any) => {
-        if(event.target.files && event.target.files[0]){
-            const i = event.arget.files[0];
-            // setFile(event.target.files?.[0]);
-            setFile(i);
-            setCreateObjectUrl(URL.createObjectURL(i))
-        }
-    }
 
+    const setCustomValue = (id:any, value: any) => {
+        setState((prevValues) => ({
+            ...prevValues,
+            [id] : value
+        }));
+    };
+    // const handleImageChange = (event: any) => {
+    //     if(event.target.files && event.target.files[0]){
+    //         const i = event.arget.files[0];
+    //         // setFile(event.target.files?.[0]);
+    //         setFile(i);
+    //         setCreateObjectUrl(URL.createObjectURL(i))
+    //     }
+    // }
+
+    //populate all categories into the combo box
     useEffect(() => {
         try{
             setIsLoading(true);
@@ -77,13 +89,13 @@ const AddPostComponent = ({title, message, cate, image}: PostProps) => {
         // alert(selectedOption)
         // alert(file)
         try{
-            if(!file) return;
+            if(!imageSrc) return;
             setIsLoading(true);
             const data = new FormData();
             data.set('title', state.title)
             data.set('message', state.message);
             data.set('category', selectedOption);
-            data.set('file', file);
+            data.set('imageSrc', state.imageSrc);
 
             const response = await fetch ('/api/post', {
                 method: 'POST',
@@ -123,6 +135,24 @@ const AddPostComponent = ({title, message, cate, image}: PostProps) => {
                         <form onSubmit={addPost}>
                             <div className="form-control w-full max-w-xs">
                                 <label className="label">
+                                    <span className="label-text">Choose Post Image?</span>
+                                </label>
+                                <div className={"w-[500px]"}>
+                                    <ImageUpload value={state.imageSrc} onChange={(value) => setCustomValue("imageSrc",value)}
+                                                 className={"input input-bordered  bg-slate-500  h-50 w-full max-w-xs hover:ring-2 hover:ring-blue-500\""}
+                                    />
+                                </div>
+                                {/*<img src={createObjectURL} alt={"IT Trends"}/>*/}
+                                {/*<input*/}
+                                {/*    type={"file"} name={image}*/}
+                                {/*    accept={"image/*"}*/}
+                                {/*    onChange={handleImageChange}*/}
+                                {/*    className="textarea textarea-bordered  bg-slate-500  h-50 w-full max-w-xs hover:ring-2 hover:ring-blue-500"*/}
+                                {/*/>*/}
+                            </div>
+
+                            <div className="form-control w-full max-w-xs">
+                                <label className="label">
                                     <span className="label-text">What is the title?</span>
                                 </label>
                                 <input
@@ -132,6 +162,7 @@ const AddPostComponent = ({title, message, cate, image}: PostProps) => {
                                     type="text"  placeholder="Enter Post Title"
                                     className="input input-secondary bg-slate-500 w-full max-w-xs hover:ring-2 hover:ring-blue-500" />
                             </div>
+
                             <div className="form-control w-full max-w-xs">
                                 <label className="label">
                                     <span className="label-text">What is the Post?</span>
@@ -144,19 +175,6 @@ const AddPostComponent = ({title, message, cate, image}: PostProps) => {
                                     minLength={"10"}
                                     maxLength={"1000"}
                                     className="textarea textarea-bordered bg-slate-500  h-50 w-full max-w-xs hover:ring-2 hover:ring-blue-500" placeholder="Enter Post Body"></textarea>
-                            </div>
-
-                            <div className="form-control w-full max-w-xs">
-                                <label className="label">
-                                    <span className="label-text">Choose Post Image?</span>
-                                </label>
-                                    <img src={createObjectURL} alt={"IT Trends"}/>
-                                <input
-                                    type={"file"} name={image}
-                                    accept={"image/*"}
-                                    onChange={handleImageChange}
-                                    className="textarea textarea-bordered  bg-slate-500  h-50 w-full max-w-xs hover:ring-2 hover:ring-blue-500"
-                                />
                             </div>
 
                             <div className="form-control w-full max-w-xs">

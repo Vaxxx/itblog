@@ -23,12 +23,20 @@ const Dashboard =  () => {
                 <div className="col-span-3 min-w-fit px-2 mt-4">
                     <h3 className={"text-3xl text-bold my-3 text-center opacity-75 shadow-inner border-slate-950"}>Hello {session?.user?.name}!</h3>
                     {
-                        session?.user?.image ??  <Image
+                        session?.user?.image ?
+                            <Image
+                                src={session.user.image}
+                                alt={"User Avatar"}
+                                width={"200"}
+                                height={"40"}
+                                className={"w-fit"}
+                            />
+                                :  <Image
                             src={"/placeholder.jpg"}
                             alt={"User Avatar"}
                             width={"200"}
-                            height={"80"}
-                            className={"w-full"}
+                            height={"40"}
+                            className={"w-fit"}
                         />
                     }
                     <div className={"mb-2"}>

@@ -3,7 +3,7 @@ import {AiFillEye, AiOutlineFileAdd, AiOutlineProfile, AiOutlineSetting} from "r
 import {BiSolidContact, BiSolidMessageSquareAdd} from "react-icons/bi";
 import Link from "next/link";
 
-const MenuButton = () => {
+const MenuButton = ({postId}) => {
     return (
         <div>
             <div className={"p-3 my-4 mt-5  hidden:md"}>
@@ -13,8 +13,8 @@ const MenuButton = () => {
                     </Link>
                 </button>
                 <button className="flex justify-start btn btn-default  drawer-button ring-2 ring-gray-300 hover:text-black hover:bg-white rounded-lg w-full mb-5 mt-3 hidden:md">
-                    <Link href={"/pages/post/add"} className={"flex flex-row  gap-5 items-start justify-start"}>
-                        <BiSolidMessageSquareAdd  size={30}/> <span className={"pt-2"}>Add Post</span>
+                    <Link href={`/pages/post/myPost`} className={"flex flex-row  gap-5 items-start justify-start"}>
+                        <BiSolidMessageSquareAdd  size={30}/> <span className={"pt-2"}>My Posts</span>
                     </Link>
                 </button>
                 <button className="flex justify-start btn btn-default  drawer-button ring-2 ring-gray-300 hover:text-black hover:bg-white rounded-lg w-full mb-5 mt-3 hidden:md">

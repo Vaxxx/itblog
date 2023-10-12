@@ -3,9 +3,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import prisma from "@/libs/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import {PrismaAdapter} from "@next-auth/prisma-adapter";
 
 export const authOptions = {
+    adapter: PrismaAdapter(prisma),
     providers: [
         GithubProvider({
             clientId: process.env.GITHUB_CLIENT_ID,
@@ -13,7 +15,7 @@ export const authOptions = {
         }),
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GITHUB_SECRET_ID
+            clientSecret: process.env.GOOGLE_SECRET_ID
         }),
         CredentialsProvider({
             name: 'Credentials',
@@ -59,6 +61,16 @@ export const authOptions = {
     },
     debug: process.env.NODE_ENV === "development",
     callbacks: {
+
+        // async signIn({user, account}){
+        //     // if(account.provider === 'google'){
+        //     //     try{
+        //     //         await fetch(" ")
+        //     //     }
+        //     // }
+        //     console.log("user", user)
+        //     console.log("Account", account);
+        // },
 
         async session({session, token}) {
             if(token){

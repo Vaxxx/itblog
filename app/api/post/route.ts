@@ -6,6 +6,7 @@ import {getCategoryById} from "@/app/actions/category/getCategoryById";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 import getCurrentUser from "@/app/actions/user/getCurrentUser";
+import toast from "react-hot-toast";
 
 interface RequestBody{
     title: string;
@@ -14,12 +15,16 @@ interface RequestBody{
     category: number;
     user: number;
 }
-
+//add a new post
 export const POST = async(request: NextRequest) => {
     try{
         const currentUser = await getCurrentUser();
+        if(!currentUser){
+            console.log("No User Registered")
+            return toast.error("No User Registered!")
+        }
         const body:RequestBody  = await request.formData();
-        const file: File | null=body.get('file') as unknown as File;
+        // const file: File | null=body.get('file') as unknown as File;
 
         //get categories details
         // const categoryDetails = await getCategoryById(body.get('category'))
@@ -28,18 +33,18 @@ export const POST = async(request: NextRequest) => {
                 id: Number(body.get('category'))
             }
         })
-       // console.log("category details:")
-       //  console.log(categoryDetails.description)
-        if (!file){
-            return NextResponse.json({message: false});
-        }
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
+        // console.log("category details:")
+        //  console.log(categoryDetails.description)
+        //  if (!file){
+        //      return NextResponse.json({message: false});
+        //  }
+        //  const bytes = await file.arrayBuffer();
+        //  const buffer = Buffer.from(bytes);
 
         //write file into filesystem in upload location
-        const path =  `/public/uploads/${file.name}`;
-        console.log(`open ${path} to see the uploaded file`);
-        await writeFile(path, buffer);
+        // const path =  `/public/uploads/${file.name}`;
+        // console.log(`open ${path} to see the uploaded file`);
+        // await writeFile(path, buffer);
 
 
 
@@ -55,7 +60,7 @@ export const POST = async(request: NextRequest) => {
                 userId: Number(currentUser.id),
                 title: body.get('title'),
                 message: body.get('message'),
-                image: file.name,
+                image: body.get('imageSrc'),
                 categories: {
                     create:{
                         title: categoryDetails.title,
@@ -66,8 +71,8 @@ export const POST = async(request: NextRequest) => {
         })
 
         return NextResponse.json({message: "Post Added Successfully!"}, {status: 201});
-      }catch(error){
+    }catch(error){
         console.log("API POST ERROR: " + error);
-      }
+    }
 }
 

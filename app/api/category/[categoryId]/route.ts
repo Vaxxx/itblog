@@ -5,6 +5,7 @@ import {NextResponse} from "next/server";
 interface RequestBody{
     title: string;
     description: string;
+    id: number
 }
 
 //get a single category

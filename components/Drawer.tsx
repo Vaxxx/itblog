@@ -22,7 +22,7 @@ const Drawer = () => {
                         {/* Sidebar content here */}
                         <li><Link href={"/profile"}>   <AiOutlineProfile  size={40}  /> Profile</Link></li>
                         <li><Link href={"/settings"}>  <AiOutlineSetting size={40} /> Settings</Link></li>
-                        <li><Link href={"/pages/posts"}> <BiSolidMessageSquareAdd size={40} />Add Post</Link></li>
+                        <li><Link href={"/pages/posts/myPost"}> <BiSolidMessageSquareAdd size={40} />Add Post</Link></li>
                         <li><Link href={"/pages/about"}><FcAbout size={40} />  About Us</Link></li>
                         <li><Link href={"/pages/contact"}> <BiSolidContact size={40}  /> Contact Us</Link></li>
                     </ul>
